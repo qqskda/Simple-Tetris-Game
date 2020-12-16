@@ -1,6 +1,8 @@
 #pragma once
 
 #include <Windows.h>
+#include <vector>
+using namespace std;
 
 #define TABLE_X_AXIS 20 // Tetris table x axis length
 #define TABLE_Y_AXIS 38 // Tetris table y axis length
@@ -177,7 +179,6 @@ public:
     {
         return this->shape[rotationCount][y][x];
     }
-
     int getX()
     {
         return this->x;
@@ -189,11 +190,27 @@ public:
     int getRotationCount() {
         return this->rotationCount;
     }
+    void setX(int x)
+    {
+        this->x = x;
+    }
+    void setY(int y)
+    {
+        this->y = y;
+    }
+    void setRotation(int rotation);
     void down();
     void left();
     void right();
     void rotate();
+};
 
+class Backup
+{
+public:
+    static void updateBackupBlock(Block* origin, Block& backupBlock);
+    static void updateBackupTable(vector<vector<int>>& origin, vector<vector<int>>& backupTable);
+    static void restoreOriginTable(vector<vector<int>>& origin, vector<vector<int>>& backupTable);
 };
 
 class Block1 : public Block {

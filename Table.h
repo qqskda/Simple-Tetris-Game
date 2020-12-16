@@ -1,5 +1,7 @@
 #pragma once
 #include "Blocks.h"
+#include <iostream>
+#include <ctime>
 
 #define LEFT 75
 #define RIGHT 77 
@@ -7,6 +9,7 @@
 #define DOWN 80
 
 using namespace std;
+
 
 class GameTable
 {

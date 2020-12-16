@@ -1,5 +1,4 @@
 ﻿#include "Blocks.h"
-
 // Cursor invisible 0, visible 1
 void CursorView(char show)
 {
@@ -35,4 +34,25 @@ void Block::right() {
 }
 void Block::rotate() {
     this->rotationCount = (this->rotationCount + 1) % 4; // count stay within 0,1,2,3
+}
+void Block::setRotation(int rotation) {
+	this->rotationCount = rotation;
+}
+
+void Backup::updateBackupBlock(Block* origin, Block& backupBlock)
+{
+    backupBlock.setX(origin->getX());
+    backupBlock.setY(origin->getY());
+    backupBlock.setRotation(origin->getRotationCount()); // save the original one
+}
+
+void Backup::updateBackupTable(vector<vector<int>>& origin, vector<vector<int>>& backupTable)
+{
+    backupTable.resize(origin.size(), vector<int>(origin.size()));
+    copy(origin.begin(), origin.end(), backupTable.begin());
+}
+
+void Backup::restoreOriginTable(vector<vector<int>>& origin, vector<vector<int>>& backupTable)
+{
+    copy(backupTable.begin(), backupTable.end(), origin.begin());
 }
