@@ -13,8 +13,8 @@ void GameTable::GameTableDraw()
     {
         for (int col = 0; col < this->xAxis; ++col)
         {
-            if (this->table[row][col] == 1) cout << "*";
-            else if (this->table[row][col] == 2) cout << "X";
+            if (this->table[row][col] == 1) cout << "* ";
+            else if (this->table[row][col] == 2) cout << "X ";
             else cout << "  ";
         }
         cout << "\n";

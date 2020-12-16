@@ -167,7 +167,7 @@ class Block
 {
 protected:
     const int(&shape)[4][4][4]; // shape[rotate][x][y] 
-    int x = (int)TABLE_X_AXIS / 2 - 3; // Centre
+    int x = ((int)TABLE_X_AXIS / 2) - 3; // Centre
     int y = 1;
     int rotationCount = 0; // 0 - 3
 public:
@@ -175,19 +175,19 @@ public:
 
     int getShape(int rotationCount, int y, int x)
     {
-        return shape[rotationCount][y][x];
+        return this->shape[rotationCount][y][x];
     }
 
     int getX()
     {
-        return x;
+        return this->x;
     }
     int getY()
     {
-        return y;
+        return this->y;
     }
     int getRotationCount() {
-        return rotationCount;
+        return this->rotationCount;
     }
     void down();
     void left();

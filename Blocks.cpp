@@ -25,10 +25,10 @@ void gotoxy(short x, short y)
 Block::Block(const int(&arr)[4][4][4]) : shape(arr) {}
 
 void Block::down() { // block move down
-    this->y ++;
+    this->y++;
 }
 void Block::left() {
-    this->x --;
+    this->x--;
 }
 void Block::right() {
     this->x++;

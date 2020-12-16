@@ -35,7 +35,7 @@ int main(void) {
     system("mode con cols=100 lines=40"); // Console creationg cols and lines. 
     GameTable gt(TABLE_X_AXIS, TABLE_Y_AXIS); // GameTable Creation
     MainMenu(); // constructor call
-    GamePlay::GamePlay();
+    GamePlay gp = GamePlay();
     int b = getchar();
     return 0;
 }
