@@ -5,6 +5,7 @@
 #include "Simple Tetris Game.h"
 #include "Table.h"
 #include "Blocks.h"
+#include "GamePlay.h"
 
 using namespace std;
 
@@ -22,7 +23,7 @@ public:
         cout << "\t\t"; cout << "      @       @                @       @     @    @             @\n";
         cout << "\t\t"; cout << "      @       @@@@@@@@@        @       @      @   @   @@@@@@@@@@@\n\n\n\n\n";
         cout << "\t\t"; cout << "               Press keys to start the game .\n\n\n\n\n\n\n";
-        getchar(); // Waiting for the key to start the game
+        int a = getchar(); // Waiting for the key to start the game
         system("cls"); // Clean the console window 
 	}
 };
@@ -30,11 +31,12 @@ public:
 
 
 int main(void) {
+    CursorView(false);
     system("mode con cols=100 lines=40"); // Console creationg cols and lines. 
     GameTable gt(TABLE_X_AXIS, TABLE_Y_AXIS); // GameTable Creation
     MainMenu(); // constructor call
-    gt.GameTableDraw(); // Draw the table 
-    getchar();
+    GamePlay::GamePlay();
+    int b = getchar();
     return 0;
 }
 

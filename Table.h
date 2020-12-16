@@ -1,18 +1,25 @@
 #pragma once
+#include "Blocks.h"
+
+#define LEFT 75
+#define RIGHT 77 
+#define UP 72
+#define DOWN 80
 
 using namespace std;
 
 class GameTable
 {
 private:
-    int xAxis;
-    int yAxis;
+    int xAxis = 0;
+    int yAxis = 0;
     vector<vector<int>> table; // game table
+    Block* blockObject = new Block1;
 public:
-    GameTable(int xAxis, int yAxis)
-    {
-        this->xAxis = xAxis;
-        this->yAxis = yAxis;
+    GameTable(int xAx, int yAx)
+    {   
+        xAxis = xAx;
+        yAxis = yAx;
         for (int row = 0; row < yAxis; ++row)
         {   // creating the table outline
             vector<int> rowVec;
@@ -37,17 +44,9 @@ public:
     }
 
     // function to draw the table
-    void GameTableDraw()
-    {
-        for (int row = 0; row < yAxis; ++row)
-        {
-            for (int col = 0; col < xAxis; ++col)
-            {
-                if (table[row][col] == 1) cout << "**";
-                else cout << "  ";
-            }
-            cout << "\n";
-        }
-    }
-
+    void GameTableDraw();
+    void blockUpdate(int key); // 0: newUpdate, 2: Remove Block, 1: first update
+    void createBlock();
+    void moveBlock(int inputKey);
+    void rotateBlock();
 };

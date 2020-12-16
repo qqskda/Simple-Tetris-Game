@@ -3,7 +3,7 @@
 #include <Windows.h>
 
 #define TABLE_X_AXIS 20 // Tetris table x axis length
-#define TABLE_Y_AXIS 30 // Tetris table y axis length
+#define TABLE_Y_AXIS 38 // Tetris table y axis length
 
 // Cursor invisible 0, visible 1
 void CursorView(char show);
@@ -193,4 +193,27 @@ public:
     void left();
     void right();
     void rotate();
+
 };
+
+class Block1 : public Block {
+public:
+    Block1() : Block::Block(block1) {}
+};
+
+class Block2 : public Block {
+public:
+    Block2() : Block::Block(block2) {}
+};
+class Block3 : public Block {
+public:
+    Block3() : Block::Block(block3) {}
+};
+class Block4 : public Block {
+public:
+    Block4() : Block::Block(block4) {}
+};
+class Block5 : public Block {
+public:
+    Block5() : Block::Block(block5) {}
+};;
