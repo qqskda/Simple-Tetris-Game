@@ -13,6 +13,12 @@ void CursorView(char show);
 // Cursor Position
 void gotoxy(short x, short y);
 
+// Shape DB
+struct Shape {
+    int rotation;
+    int nth;
+};
+
 // 1st block
 const int block1[4][4][4] = {
         {
@@ -168,16 +174,16 @@ const int block5[4][4][4] = {
 class Block
 {
 protected:
-    const int(&shape)[4][4][4]; // shape[rotate][x][y] 
+    Shape shape;
     int x = ((int)TABLE_X_AXIS / 2) - 3; // Centre
     int y = 1;
     int rotationCount = 0; // 0 - 3
 public:
-    Block(const int(&arr)[4][4][4]);
+    Block(int rotate, int bkNum);
 
-    int getShape(int rotationCount, int y, int x)
+    Shape getShape(int rotationCount, int y, int x)
     {
-        return this->shape[rotationCount][y][x];
+        return this->shape;
     }
     int getX()
     {
@@ -203,6 +209,10 @@ public:
     void left();
     void right();
     void rotate();
+    void setShape(int(&arr)[4][4][4]);
+    Shape getShape(){
+        return this->shape;
+    }
 };
 
 class Backup

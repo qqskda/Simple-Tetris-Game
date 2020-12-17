@@ -10,8 +10,8 @@ public:
 	GamePlay() // constructor
 	{
 		gt = new GameTable(TABLE_X_AXIS, TABLE_Y_AXIS);
-		gt->GameTable::createBlock(); // default block creation
-		gt->GameTable::GameTableDraw(); // draw the gametable
+		gt->createBlock(); // default block creation
+		gt->GameTableDraw(); // draw the gametable
 		while (true)
 		{
 			int nSelect;
@@ -24,24 +24,24 @@ public:
 					switch (nSelect)
 					{
 					case UP:
-						gt->GameTable::rotateBlock(); // Rotate the block 90 degree 
+						gt->rotateBlock(); // Rotate the block 90 degree 
 						gotoxy(0, 0); // move the cursor 0,0 
-						gt->GameTable::GameTableDraw(); // overwrite the table 
+						gt->GameTableDraw(); // overwrite the table 
 						break;
 					case DOWN: 
-						gt->GameTable::moveBlock(DOWN);
+						gt->moveBlock(DOWN);
 						gotoxy(0, 0);
-						gt->GameTable::GameTableDraw();
+						gt->GameTableDraw();
 						break;
 					case LEFT: 
-						gt->GameTable::moveBlock(LEFT);
+						gt->moveBlock(LEFT);
 						gotoxy(0, 0);
-						gt->GameTable::GameTableDraw();
+						gt->GameTableDraw();
 						break;
 					case RIGHT:
-						gt->GameTable::moveBlock(RIGHT);
+						gt->moveBlock(RIGHT);
 						gotoxy(0, 0);
-						gt->GameTable::GameTableDraw();
+						gt->GameTableDraw();
 						break;
 					default:
 						break;

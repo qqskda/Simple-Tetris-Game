@@ -19,7 +19,7 @@ private:
     int xAxis = 0;
     int yAxis = 0;
     vector<vector<int>> table; // game table
-    Block* blockObject;
+    Block* blockObject = nullptr;
 public:
     GameTable(int xAx, int yAx)
     {   
@@ -51,7 +51,7 @@ public:
 
     // function to draw the table
     void GameTableDraw();
-    void blockUpdate(int key); // 0: newUpdate, 2: Remove Block, 1: first update
+    int  blockUpdate(int key); // 0: newUpdate, 2: Remove Block, 1: first update
     void createBlock();
     void moveBlock(int inputKey);
     void rotateBlock();
