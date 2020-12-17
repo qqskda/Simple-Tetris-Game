@@ -10,8 +10,8 @@ void GameTable::GameTableDraw()
     {
         for (int col = 0; col < this->xAxis; ++col)
         {
-            if (this->table[row][col] == 1) cout << "* ";
-            else if (this->table[row][col] == 2) cout << "X ";
+            if (this->table[row][col] == 1) cout << (char)178u << " ";
+            else if (this->table[row][col] == 2) cout << (char)254u << " ";
             else cout << "  ";
         }
         cout << "\n";
@@ -26,9 +26,9 @@ void GameTable::blockUpdate(int key)
     Backup::updateBackupTable(this->table, bkTable);
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 4; j++) {
-            int Y = j + this->blockObject->Block::getY();
-            int X = i + this->blockObject->Block::getX();
-            int blockValue = this->blockObject->Block::getShape(this->blockObject->Block::getRotationCount(), i, j);
+            int Y = j + this->blockObject->getY();
+            int X = i + this->blockObject->getX();
+            int blockValue = this->blockObject->getShape(this->blockObject->getRotationCount(), i, j);
             switch (key)
             {
             case 1: // creation of the block
@@ -38,34 +38,37 @@ void GameTable::blockUpdate(int key)
                 if (this->table[Y][X] == 2) this->table[Y][X] = 0;
                 break;
             case 3: // move
-                if (blockValue != 2) continue; // if it is not block (empty) -> all good
-                if (this->table[Y][X] == 0) // when it is empty space
+                if (blockValue == 2)
                 {
-                    this->table[Y][X] = blockValue; // move the block to the empty space
-                }
-                else if (table[Y][X] == 2) 
-                {
-                    Backup::restoreOriginTable(this->table, bkTable);
-                    this->blockObject->setX(bkBlock.getX());
-                    this->blockObject->setY(bkBlock.getY());
-                    return; // stop the changings
+                    if (this->table[Y][X] == 0) // when it is empty space
+                    {
+                        this->table[Y][X] = blockValue; // move the block to the empty space
+                    }
+                    else if (table[Y][X] == 2)
+                    {
+                        Backup::restoreOriginTable(this->table, bkTable);
+                        this->blockObject->setX(bkBlock.getX());
+                        this->blockObject->setY(bkBlock.getY());
+                        return; // stop the changings
+                    }
                 }
                 break;
             case 4: // rotate of the block from the current position 
-                if (blockValue != 2) continue; // if it is not block (empty) -> all good
-                if (this->table[Y][X] == 0) // when it is empty space
+                if (blockValue == 2)
                 {
-                    this->table[Y][X] = blockValue; // move the block to the empty space
-                } 
-                else if (table[Y][X] == 1)
-                {
-                    Backup::restoreOriginTable(this->table, bkTable);
-                    this->blockObject->setRotation(bkBlock.getRotationCount() + 3 % 4);
-                    return; // stop the changings
+                    if (this->table[Y][X] == 0) // when it is empty space
+                    {
+                        this->table[Y][X] = blockValue; // move the block to the empty space
+                    }
+                    else if (table[Y][X] == 1)
+                    {
+                        Backup::restoreOriginTable(this->table, bkTable);
+                        this->blockObject->setRotation(bkBlock.getRotationCount() + 3 % 4);
+                        return; // stop the changings
+                    }
                 }
                 break;
             }
-           
         }
     }
 }

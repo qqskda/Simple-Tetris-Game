@@ -2,6 +2,8 @@
 #include "Blocks.h"
 #include <iostream>
 #include <ctime>
+#include <io.h>
+#include <fcntl.h>
 
 #define LEFT 75
 #define RIGHT 77 

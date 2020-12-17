@@ -30,7 +30,8 @@ public:
 
 
 
-int main(void) {
+int wmain(void) {
+    
     CursorView(false);
     system("mode con cols=100 lines=40"); // Console creationg cols and lines. 
     GameTable gt(TABLE_X_AXIS, TABLE_Y_AXIS); // GameTable Creation
