@@ -20,11 +20,13 @@ void GameTable::GameTableDraw()
 
 int GameTable::blockUpdate(int key)
 {
+    int blockNum = this->blockObject->getShape().nth;
+    int rotation = this->blockObject->getShape().rotation;
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 4; j++) {
             int Y = j + this->blockObject->getY();
             int X = i + this->blockObject->getX();
-            int blockValue = this->blockObject->getShape(this->blockObject->getRotationCount(), i, j);
+            int blockValue = vecBlocks[blockNum][rotation][i][j];
             switch (key)
             {
             case 1: // creation of the block
@@ -78,7 +80,7 @@ void GameTable::createBlock()
 
 void GameTable::moveBlock(int inputKey)
 {
-    Block bkBlock(block1);
+    Block bkBlock(0,0);
     vector<vector<int>> bkTable;
     Backup::updateBackupBlock(this->blockObject, bkBlock); // backup the original block
     Backup::updateBackupTable(this->table, bkTable);
@@ -100,7 +102,7 @@ void GameTable::moveBlock(int inputKey)
 
 void GameTable::rotateBlock()
 {
-    Block bkBlock(block1);
+    Block bkBlock(0,0);
     vector<vector<int>> bkTable;
     Backup::updateBackupBlock(this->blockObject, bkBlock); // backup the original block
     Backup::updateBackupTable(this->table, bkTable);

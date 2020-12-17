@@ -13,12 +13,13 @@ void CursorView(char show);
 // Cursor Position
 void gotoxy(short x, short y);
 
-// Shape DB
+// Shape Data Structure
 struct Shape {
-    int rotation;
     int nth;
+    int rotation;
 };
 
+vector<const int[4][4][4]> vecBlocks;
 // 1st block
 const int block1[4][4][4] = {
         {
@@ -46,7 +47,7 @@ const int block1[4][4][4] = {
                         {0, 0, 2, 0},
                         {0, 0, 2, 0},
                         {0, 0, 2, 0}
-        },
+        }
 
 };
 // 2nd block
@@ -74,7 +75,7 @@ const int block2[4][4][4] = {
                         {0, 2, 2, 0},
                         {0, 2, 2, 0},
                         {0, 0, 0, 0}
-        },
+        }
 
 };
 // 3rd blcok
@@ -105,7 +106,7 @@ const int block3[4][4][4] = {
                         {2, 2, 2, 0},
                         {0, 0, 0, 0}
 
-        },
+        }
 
 };
 // 4th block
@@ -136,7 +137,7 @@ const int block4[4][4][4] = {
                         {2, 2, 0, 0},
                         {0, 0, 0, 0}
 
-        },
+        }
 
 };
 // 5th block
@@ -167,9 +168,11 @@ const int block5[4][4][4] = {
                         {0, 0, 2, 0},
                         {0, 0, 0, 0}
 
-        },
+        }
 
 };
+
+vecBlocks.push_back(block1);
 
 class Block
 {
@@ -181,9 +184,10 @@ protected:
 public:
     Block(int rotate, int bkNum);
 
-    Shape getShape(int rotationCount, int y, int x)
+    Shape getShape(int nth, int rotation)
     {
-        return this->shape;
+        Shape output = { nth, rotation };
+        return output;
     }
     int getX()
     {
@@ -209,7 +213,7 @@ public:
     void left();
     void right();
     void rotate();
-    void setShape(int(&arr)[4][4][4]);
+    void setShape(Shape givenShape);
     Shape getShape(){
         return this->shape;
     }
@@ -225,22 +229,22 @@ public:
 
 class Block1 : public Block {
 public:
-    Block1() : Block::Block(block1) {}
+    Block1() : Block::Block((int) 0, (int) 0) {}
 };
 
 class Block2 : public Block {
 public:
-    Block2() : Block::Block(block2) {}
+    Block2() : Block::Block((int)0, (int)0) {}
 };
 class Block3 : public Block {
 public:
-    Block3() : Block::Block(block3) {}
+    Block3() : Block::Block((int)0, (int)0) {}
 };
 class Block4 : public Block {
 public:
-    Block4() : Block::Block(block4) {}
+    Block4() : Block::Block((int)0, (int)0) {}
 };
 class Block5 : public Block {
 public:
-    Block5() : Block::Block(block5) {}
+    Block5() : Block::Block((int)0, (int)0) {}
 };;

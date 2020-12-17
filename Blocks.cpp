@@ -41,8 +41,9 @@ void Block::rotate() {
 void Block::setRotation(int rotation) {
 	this->rotationCount = rotation;
 }
-void Block::setShape(int(&arr)[4][4][4]) {
-    this->shape = arr;
+void Block::setShape(Shape givenShape) {
+    this->shape.nth = givenShape.nth;
+    this->shape.rotation = givenShape.rotation;
 }
 
 void Backup::updateBackupBlock(Block* origin, Block& backupBlock)
