@@ -182,7 +182,7 @@ protected:
     int y = 1;
     int rotationCount = 0; // 0 - 3
 public:
-    Block(const int (*bkNum)[4][4][4], int rotation);
+    Block(const int (*bkNum)[4][4][4]);
 
     int getX()
     {
@@ -219,27 +219,26 @@ class Backup
 public:
     static void updateBackupBlock(Block* origin, Block& backupBlock);
     static void updateBackupTable(vector<vector<int>>& origin, vector<vector<int>>& backupTable);
-    static void restoreOriginTable(vector<vector<int>>& origin, vector<vector<int>>& backupTable);
 };
 
 class Block1 : public Block {
 public:
-    Block1() : Block::Block(&block1, (int) 0) {}
+    Block1() : Block::Block(&block1) {}
 };
 
 class Block2 : public Block {
 public:
-    Block2() : Block::Block(&block2, (int)0) {}
+    Block2() : Block::Block(&block2) {}
 };
 class Block3 : public Block {
 public:
-    Block3() : Block::Block(&block3, (int)0) {}
+    Block3() : Block::Block(&block3) {}
 };
 class Block4 : public Block {
 public:
-    Block4() : Block::Block(&block4, (int)0) {}
+    Block4() : Block::Block(&block4) {}
 };
 class Block5 : public Block {
 public:
-    Block5() : Block::Block(&block5, (int)0) {}
+    Block5() : Block::Block(&block5) {}
 };;

@@ -21,8 +21,8 @@ void gotoxy(short x, short y)
 }
 
 // Block parent class
-Block::Block(const int (*bkNum)[4][4][4], int rotation){
-    this->shape.nth = bkNum;
+Block::Block(const int (*bkNum)[4][4][4]){
+        this->shape.nth = bkNum;
     }
 
 void Block::down() { // block move down
@@ -54,11 +54,5 @@ void Backup::updateBackupBlock(Block* origin, Block& backupBlock)
 
 void Backup::updateBackupTable(vector<vector<int>>& origin, vector<vector<int>>& backupTable)
 {
-    backupTable.resize(origin.size(), vector<int>(origin.size()));
     copy(origin.begin(), origin.end(), backupTable.begin());
-}
-
-void Backup::restoreOriginTable(vector<vector<int>>& origin, vector<vector<int>>& backupTable)
-{
-    copy(backupTable.begin(), backupTable.end(), origin.begin());
 }

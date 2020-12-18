@@ -33,7 +33,9 @@ int GameTable::blockUpdate(int key)
                 this->table[Y][X] = blockValue;
                 break;
             case 2: // Remove the block from the table
-                if (this->table[Y][X] == 2) this->table[Y][X] = 0;
+                if (this->table[Y][X] == 2) {
+                    this->table[Y][X] = 0;
+                }
                 break;
             case 3: // move | Rotate
                 if (blockValue == 2)
@@ -42,7 +44,7 @@ int GameTable::blockUpdate(int key)
                     {
                         this->table[Y][X] = blockValue; // move the block to the empty space
                     }
-                    else if (table[Y][X] == 2)
+                    else if (table[Y][X] == 1)
                     {
                         return 1; // stop the changings
                     }
@@ -80,8 +82,9 @@ void GameTable::createBlock()
 
 void GameTable::moveBlock(int inputKey)
 {
-    Block bkBlock(&block1,0);
+    Block bkBlock(&block1);
     vector<vector<int>> bkTable;
+    bkTable.resize(this->table.size(), vector<int>(this->table[0].size()));
     Backup::updateBackupBlock(this->blockObject, bkBlock); // backup the original block
     Backup::updateBackupTable(this->table, bkTable);
     blockUpdate((int)2);  // remove the block
@@ -94,16 +97,16 @@ void GameTable::moveBlock(int inputKey)
     // Now update the table with the new block location
     if (blockUpdate((int)3))
     {
-        Backup::restoreOriginTable(this->table, bkTable);
-        this->blockObject->setX(bkBlock.getX());
-        this->blockObject->setY(bkBlock.getY());
+        Backup::updateBackupTable(bkTable, this->table);
+        Backup::updateBackupBlock(&bkBlock, *this->blockObject);
     }
 }
 
 void GameTable::rotateBlock()
 {
-    Block bkBlock(&block1,0);
+    Block bkBlock(&block1);
     vector<vector<int>> bkTable;
+    bkTable.resize(this->table.size(), vector<int>(this->table[0].size()));
     Backup::updateBackupBlock(this->blockObject, bkBlock); // backup the original block
     Backup::updateBackupTable(this->table, bkTable);
 
@@ -112,8 +115,7 @@ void GameTable::rotateBlock()
     
     if (blockUpdate((int)3)) // update the block if it is empty place
     {
-        Backup::restoreOriginTable(this->table, bkTable);
-        this->blockObject->setRotation(bkBlock.getRotationCount());
-        this->blockObject->setShape(bkBlock.getShape());
+        Backup::updateBackupTable(bkTable, this->table);
+        Backup::updateBackupBlock(&bkBlock, *this->blockObject);
     }
 }
