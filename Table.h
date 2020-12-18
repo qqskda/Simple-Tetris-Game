@@ -2,8 +2,6 @@
 #include "Blocks.h"
 #include <iostream>
 #include <ctime>
-#include <io.h>
-#include <fcntl.h>
 
 #define LEFT 75
 #define RIGHT 77 
@@ -51,7 +49,7 @@ public:
 
     // function to draw the table
     void GameTableDraw();
-    int  blockUpdate(int key); // 0: newUpdate, 2: Remove Block, 1: first update
+    int  blockUpdate(int key); 
     void createBlock();
     void moveBlock(int inputKey);
     void rotateBlock();

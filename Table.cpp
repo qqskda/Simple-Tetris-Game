@@ -9,8 +9,8 @@ void GameTable::GameTableDraw()
     {
         for (int col = 0; col < this->xAxis; ++col)
         {
-            if (this->table[row][col] == 1) cout << (char)178u << " ";
-            else if (this->table[row][col] == 2) cout << (char)254u << " ";
+            if (this->table[row][col] == enumBlock::WALL) cout << (char)178u << " ";
+            else if (this->table[row][col] == enumBlock::BLK) cout << (char)254u << " ";
             else cout << "  ";
         }
         cout << "\n";
@@ -19,6 +19,8 @@ void GameTable::GameTableDraw()
 
 int GameTable::blockUpdate(int key)
 {
+    // the shape will be accessed 4*4 times -> better copy it in the given size.
+    // Will the access consumes more expensive than copying the entire shape?
     auto blockShape = *this->blockObject->getShape().nth;
     int rotation = this->blockObject->getRotationCount();
     for (int i = 0; i < 4; i++) {
@@ -33,18 +35,18 @@ int GameTable::blockUpdate(int key)
                 this->table[Y][X] = blockValue;
                 break;
             case 2: // Remove the block from the table
-                if (this->table[Y][X] == 2) {
-                    this->table[Y][X] = 0;
+                if (this->table[Y][X] == enumBlock::BLK) {
+                    this->table[Y][X] = enumBlock::SPACE;
                 }
                 break;
             case 3: // move | Rotate
                 if (blockValue == 2)
                 {
-                    if (this->table[Y][X] == 0) // when it is empty space
+                    if (this->table[Y][X] == enumBlock::SPACE) 
                     {
                         this->table[Y][X] = blockValue; // move the block to the empty space
                     }
-                    else if (table[Y][X] == 1)
+                    else if (table[Y][X] == enumBlock::WALL)
                     {
                         return 1; // stop the changings
                     }

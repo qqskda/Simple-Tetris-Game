@@ -2,11 +2,18 @@
 
 #include <Windows.h>
 #include <vector>
-#include <functional>
 using namespace std;
 
 #define TABLE_X_AXIS 20 // Tetris table x axis length
 #define TABLE_Y_AXIS 38 // Tetris table y axis length
+
+// Blocks enum
+enum enumBlock
+{
+    SPACE = 0,
+    WALL = 1,
+    BLK = 2,
+};
 
 // Cursor invisible 0, visible 1
 void CursorView(char show);
@@ -14,7 +21,7 @@ void CursorView(char show);
 // Cursor Position
 void gotoxy(short x, short y);
 
-// Shape Data Structure
+// Shape: pass the pointer
 struct Shape {
     const int (*nth)[4][4][4]; // pointer to const int [4][4][4]
 };
@@ -139,7 +146,6 @@ const int block4[4][4][4] = {
         }
 
 };
-
 // 5th block
 const int block5[4][4][4] = {
         {
@@ -214,10 +220,13 @@ public:
     }
 };
 
+// Backup functions used to swap between the origin and backup components
+// Switch the order of input upon needs
 class Backup
 {
 public:
     static void updateBackupBlock(Block* origin, Block& backupBlock);
+    // Each table is required to be in the same size before calling the function to avoid unnecessary resize
     static void updateBackupTable(vector<vector<int>>& origin, vector<vector<int>>& backupTable);
 };
 

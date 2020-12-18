@@ -20,11 +20,10 @@ void gotoxy(short x, short y)
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
 }
 
-// Block parent class
+// Block constructor 
 Block::Block(const int (*bkNum)[4][4][4]){
         this->shape.nth = bkNum;
     }
-
 void Block::down() { // block move down
     this->y++;
 }
@@ -44,11 +43,12 @@ void Block::setShape(Shape givenShape) {
     this->shape = givenShape;
 }
 
+
 void Backup::updateBackupBlock(Block* origin, Block& backupBlock)
 {
     backupBlock.setX(origin->getX());
     backupBlock.setY(origin->getY());
-    backupBlock.setRotation(origin->getRotationCount()); // save the original one
+    backupBlock.setRotation(origin->getRotationCount()); 
     backupBlock.setShape(origin->getShape());
 }
 
