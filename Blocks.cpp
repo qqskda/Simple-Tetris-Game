@@ -33,6 +33,9 @@ void Block::left() {
 void Block::right() {
     this->x++;
 }
+void Block::up() {
+    this->y--;
+}
 void Block::rotate() {
     this->rotationCount = (this->rotationCount + 1) % 4; // count stay within 0,1,2,3
 }

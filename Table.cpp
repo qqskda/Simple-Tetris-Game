@@ -1,4 +1,5 @@
 ﻿#include "Table.h"
+#include <stdexcept>
 
 
 using namespace std;
@@ -23,34 +24,39 @@ int GameTable::blockUpdate(int key)
     // Will the access consumes more expensive than copying the entire shape?
     auto blockShape = *this->blockObject->getShape().nth;
     int rotation = this->blockObject->getRotationCount();
-    for (int i = 0; i < 4; i++) {
-        for (int j = 0; j < 4; j++) {
-            int Y = j + this->blockObject->getY();
-            int X = i + this->blockObject->getX();
-            int blockValue = blockShape[rotation][i][j];
-
+    int i, j, Y, X, blockValue, thisTableVal;
+    int currentY = this->blockObject->getY(), currentX = this->blockObject->getX();
+    for (i = 0; i < 4; i++) {
+        for (j = 0; j < 4; j++) {
+            Y = j + currentY;
+            X = i + currentX;
+            if (X < 0) return 1;
+            if (Y > TABLE_Y_AXIS) return 1;
+            thisTableVal = this->table[Y][X];
+            blockValue = blockShape[rotation][i][j];
+            
             switch (key)
             {
             case 0: // creation of the block
                 this->table[Y][X] = blockValue;
                 break;
             case 1: // Remove the block from the table
-                if (this->table[Y][X] == enumBlock::BLK) {
+                if (thisTableVal == enumBlock::BLK) {
                     this->table[Y][X] = enumBlock::SPACE;
                 }
                 break;
             case 2: // move
                 if (blockValue == enumBlock::BLK)
                 {
-                    if (this->table[Y][X] == enumBlock::SPACE) 
+                    if (thisTableVal == enumBlock::SPACE)
                     {
                         this->table[Y][X] = blockValue; // move the block to the empty space
                     }
-                    else if (table[Y][X] == enumBlock::WALL)
+                    else if (thisTableVal == enumBlock::WALL)
                     {
                         return 1; // stop the changings
                     }
-                    else if (table[Y][X] != enumBlock::BLK) // Not Space, not Wall, Not BLK ->  FBLK, BOTTOM
+                    else if (thisTableVal != enumBlock::BLK) // Not Space, not Wall, Not BLK ->  FBLK, BOTTOM
                     {
                         return 2;
                     }
@@ -59,11 +65,11 @@ int GameTable::blockUpdate(int key)
             case 3: // Rotate
                 if (blockValue == enumBlock::BLK)
                 {
-                    if (this->table[Y][X] == enumBlock::SPACE)
+                    if (thisTableVal == enumBlock::SPACE)
                     {
                         this->table[Y][X] = blockValue; // move the block to the empty space
                     }
-                    else if (table[Y][X] != enumBlock::BLK) // if not blk(2) -> if 1,3,4
+                    else if (thisTableVal != enumBlock::BLK) // if not blk(2) -> if 1,3,4
                     {
                         return 1; // stop the changings
                     }
@@ -73,6 +79,16 @@ int GameTable::blockUpdate(int key)
                 if (blockValue == enumBlock::BLK) {
                     this->table[Y][X] = enumBlock::FBLK;
                 }
+                break;
+            case 5: // Hard Drop
+                if (thisTableVal == enumBlock::BLK)
+                {
+                    if (thisTableVal == enumBlock::FBLK || thisTableVal == enumBlock::BOTTOM) // Not Space, not Wall, Not BLK ->  FBLK, BOTTOM
+                    {
+                        return 1;
+                    }
+                }
+                this->blockObject->down();
                 break;
             }
         }
@@ -153,4 +169,17 @@ void GameTable::rotateBlock()
 void GameTable::buildBlock()
 {
     blockUpdate((int)4);
+}
+
+void GameTable::hardDropBlock()
+{
+    blockUpdate((int)1);
+    int upStatus = blockUpdate((int)5);
+    if (upStatus) 
+    {
+        this->blockObject->up();
+        GameTable::buildBlock();
+        GameTable::createBlock();
+    }
+
 }
