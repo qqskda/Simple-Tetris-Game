@@ -1,5 +1,4 @@
-﻿
-#include "Table.h"
+﻿#include "Table.h"
 
 
 using namespace std;
@@ -20,13 +19,14 @@ void GameTable::GameTableDraw()
 
 int GameTable::blockUpdate(int key)
 {
-    int blockNum = this->blockObject->getShape().nth;
-    int rotation = this->blockObject->getShape().rotation;
+    auto blockShape = *this->blockObject->getShape().nth;
+    int rotation = this->blockObject->getRotationCount();
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 4; j++) {
             int Y = j + this->blockObject->getY();
             int X = i + this->blockObject->getX();
-            int blockValue = vecBlocks[blockNum][rotation][i][j];
+            int blockValue = blockShape[rotation][i][j];
+
             switch (key)
             {
             case 1: // creation of the block
@@ -80,7 +80,7 @@ void GameTable::createBlock()
 
 void GameTable::moveBlock(int inputKey)
 {
-    Block bkBlock(0,0);
+    Block bkBlock(&block1,0);
     vector<vector<int>> bkTable;
     Backup::updateBackupBlock(this->blockObject, bkBlock); // backup the original block
     Backup::updateBackupTable(this->table, bkTable);
@@ -102,18 +102,18 @@ void GameTable::moveBlock(int inputKey)
 
 void GameTable::rotateBlock()
 {
-    Block bkBlock(0,0);
+    Block bkBlock(&block1,0);
     vector<vector<int>> bkTable;
     Backup::updateBackupBlock(this->blockObject, bkBlock); // backup the original block
     Backup::updateBackupTable(this->table, bkTable);
 
     blockUpdate((int)2); // remove the block from the table
-    int tempRotation = this->blockObject->getRotationCount();
     this->blockObject->rotate(); // rotate the block
     
     if (blockUpdate((int)3)) // update the block if it is empty place
     {
         Backup::restoreOriginTable(this->table, bkTable);
-        this->blockObject->setRotation(tempRotation);
+        this->blockObject->setRotation(bkBlock.getRotationCount());
+        this->blockObject->setShape(bkBlock.getShape());
     }
 }

@@ -2,6 +2,7 @@
 
 #include <Windows.h>
 #include <vector>
+#include <functional>
 using namespace std;
 
 #define TABLE_X_AXIS 20 // Tetris table x axis length
@@ -15,11 +16,9 @@ void gotoxy(short x, short y);
 
 // Shape Data Structure
 struct Shape {
-    int nth;
-    int rotation;
+    const int (*nth)[4][4][4]; // pointer to const int [4][4][4]
 };
 
-vector<const int[4][4][4]> vecBlocks;
 // 1st block
 const int block1[4][4][4] = {
         {
@@ -140,6 +139,7 @@ const int block4[4][4][4] = {
         }
 
 };
+
 // 5th block
 const int block5[4][4][4] = {
         {
@@ -172,7 +172,7 @@ const int block5[4][4][4] = {
 
 };
 
-vecBlocks.push_back(block1);
+
 
 class Block
 {
@@ -182,13 +182,8 @@ protected:
     int y = 1;
     int rotationCount = 0; // 0 - 3
 public:
-    Block(int rotate, int bkNum);
+    Block(const int (*bkNum)[4][4][4], int rotation);
 
-    Shape getShape(int nth, int rotation)
-    {
-        Shape output = { nth, rotation };
-        return output;
-    }
     int getX()
     {
         return this->x;
@@ -229,22 +224,22 @@ public:
 
 class Block1 : public Block {
 public:
-    Block1() : Block::Block((int) 0, (int) 0) {}
+    Block1() : Block::Block(&block1, (int) 0) {}
 };
 
 class Block2 : public Block {
 public:
-    Block2() : Block::Block((int)0, (int)0) {}
+    Block2() : Block::Block(&block2, (int)0) {}
 };
 class Block3 : public Block {
 public:
-    Block3() : Block::Block((int)0, (int)0) {}
+    Block3() : Block::Block(&block3, (int)0) {}
 };
 class Block4 : public Block {
 public:
-    Block4() : Block::Block((int)0, (int)0) {}
+    Block4() : Block::Block(&block4, (int)0) {}
 };
 class Block5 : public Block {
 public:
-    Block5() : Block::Block((int)0, (int)0) {}
+    Block5() : Block::Block(&block5, (int)0) {}
 };;

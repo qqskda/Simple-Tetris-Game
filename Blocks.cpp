@@ -21,9 +21,8 @@ void gotoxy(short x, short y)
 }
 
 // Block parent class
-Block::Block(int rotation, int bkNum){
-    shape.rotation = rotation;
-    shape.nth = bkNum;
+Block::Block(const int (*bkNum)[4][4][4], int rotation){
+    this->shape.nth = bkNum;
     }
 
 void Block::down() { // block move down
@@ -42,8 +41,7 @@ void Block::setRotation(int rotation) {
 	this->rotationCount = rotation;
 }
 void Block::setShape(Shape givenShape) {
-    this->shape.nth = givenShape.nth;
-    this->shape.rotation = givenShape.rotation;
+    this->shape = givenShape;
 }
 
 void Backup::updateBackupBlock(Block* origin, Block& backupBlock)
