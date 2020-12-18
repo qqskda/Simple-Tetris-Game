@@ -10,9 +10,12 @@ using namespace std;
 // Blocks enum
 enum enumBlock
 {
-    SPACE = 0,
-    WALL = 1,
-    BLK = 2,
+    SPACE = 0,   // Empty Space
+    WALL = 1,    // Wall - Boudary
+    BLK = 2,     // Block
+    FBLK = 3,    // Finished Block = Built
+    BOTTOM = 4,  // Bottom Boundary
+
 };
 
 // Cursor invisible 0, visible 1

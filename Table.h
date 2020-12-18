@@ -37,13 +37,13 @@ public:
         for (int col = 0; col < xAx; ++col)
         {
             table[0][col] = 1;
-            table[yAx - 1][col] = 1;
+            table[yAx - 1][col] = enumBlock::BOTTOM;
         }
         // Draw the col: row - 2 reps (since top and bottom already drawn)
         for (int row = 1; row < yAx-1; ++row)
         {
             table[row][0] = 1;
-            table[row][xAx - 1] = 1;
+            table[row][xAx - 1] = enumBlock::WALL;
         }
     }
 
@@ -53,4 +53,5 @@ public:
     void createBlock();
     void moveBlock(int inputKey);
     void rotateBlock();
+    void buildBlock();
 };

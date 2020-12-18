@@ -9,8 +9,8 @@ void GameTable::GameTableDraw()
     {
         for (int col = 0; col < this->xAxis; ++col)
         {
-            if (this->table[row][col] == enumBlock::WALL) cout << (char)178u << " ";
-            else if (this->table[row][col] == enumBlock::BLK) cout << (char)254u << " ";
+            if (this->table[row][col] == enumBlock::WALL || this->table[row][col] == enumBlock::BOTTOM) cout << (char)178u << " ";
+            else if (this->table[row][col] == enumBlock::BLK || this->table[row][col] == enumBlock::FBLK) cout << (char)254u << " ";
             else cout << "  ";
         }
         cout << "\n";
@@ -31,16 +31,16 @@ int GameTable::blockUpdate(int key)
 
             switch (key)
             {
-            case 1: // creation of the block
+            case 0: // creation of the block
                 this->table[Y][X] = blockValue;
                 break;
-            case 2: // Remove the block from the table
+            case 1: // Remove the block from the table
                 if (this->table[Y][X] == enumBlock::BLK) {
                     this->table[Y][X] = enumBlock::SPACE;
                 }
                 break;
-            case 3: // move | Rotate
-                if (blockValue == 2)
+            case 2: // move
+                if (blockValue == enumBlock::BLK)
                 {
                     if (this->table[Y][X] == enumBlock::SPACE) 
                     {
@@ -50,6 +50,28 @@ int GameTable::blockUpdate(int key)
                     {
                         return 1; // stop the changings
                     }
+                    else if (table[Y][X] != enumBlock::BLK) // Not Space, not Wall, Not BLK ->  FBLK, BOTTOM
+                    {
+                        return 2;
+                    }
+                }
+                break;
+            case 3: // Rotate
+                if (blockValue == enumBlock::BLK)
+                {
+                    if (this->table[Y][X] == enumBlock::SPACE)
+                    {
+                        this->table[Y][X] = blockValue; // move the block to the empty space
+                    }
+                    else if (table[Y][X] != enumBlock::BLK) // if not blk(2) -> if 1,3,4
+                    {
+                        return 1; // stop the changings
+                    }
+                }
+                break;
+            case 4: // Build Block
+                if (blockValue == enumBlock::BLK) {
+                    this->table[Y][X] = enumBlock::FBLK;
                 }
                 break;
             }
@@ -79,7 +101,7 @@ void GameTable::createBlock()
     default:
         this->blockObject = new Block5;
     }
-    blockUpdate((int) 1); // update the block on the table
+    blockUpdate((int) 0); // update the block on the table
 }
 
 void GameTable::moveBlock(int inputKey)
@@ -89,18 +111,24 @@ void GameTable::moveBlock(int inputKey)
     bkTable.resize(this->table.size(), vector<int>(this->table[0].size()));
     Backup::updateBackupBlock(this->blockObject, bkBlock); // backup the original block
     Backup::updateBackupTable(this->table, bkTable);
-    blockUpdate((int)2);  // remove the block
+    blockUpdate((int)1);  // remove the block
 
     // Updating the block location along with the inputKey
     if (inputKey == DOWN) this->blockObject->down();
     else if (inputKey == LEFT) this->blockObject->left();
     else if (inputKey == RIGHT) this->blockObject->right();
 
+    int upStatus = blockUpdate((int)2);
     // Now update the table with the new block location
-    if (blockUpdate((int)3))
+    if (upStatus)
     {
         Backup::updateBackupTable(bkTable, this->table);
         Backup::updateBackupBlock(&bkBlock, *this->blockObject);
+        if (inputKey == DOWN && upStatus == 2)
+        {
+            GameTable::buildBlock();
+            GameTable::createBlock();
+        }
     }
 }
 
@@ -112,7 +140,7 @@ void GameTable::rotateBlock()
     Backup::updateBackupBlock(this->blockObject, bkBlock); // backup the original block
     Backup::updateBackupTable(this->table, bkTable);
 
-    blockUpdate((int)2); // remove the block from the table
+    blockUpdate((int)1); // remove the block from the table
     this->blockObject->rotate(); // rotate the block
     
     if (blockUpdate((int)3)) // update the block if it is empty place
@@ -120,4 +148,9 @@ void GameTable::rotateBlock()
         Backup::updateBackupTable(bkTable, this->table);
         Backup::updateBackupBlock(&bkBlock, *this->blockObject);
     }
+}
+
+void GameTable::buildBlock()
+{
+    blockUpdate((int)4);
 }
