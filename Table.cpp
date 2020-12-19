@@ -32,8 +32,8 @@ int GameTable::blockUpdate(int key)
             X = i + currentX;
             if (X < 0) return 1;
             if (Y > TABLE_Y_AXIS) return 1;
-            thisTableVal = this->table[Y][X];
             blockValue = blockShape[rotation][i][j];
+            if (blockValue == 2)  thisTableVal = this->table[Y][X];
             
             switch (key)
             {
@@ -41,7 +41,7 @@ int GameTable::blockUpdate(int key)
                 this->table[Y][X] = blockValue;
                 break;
             case 1: // Remove the block from the table
-                if (thisTableVal == enumBlock::BLK) {
+                if (this->table[Y][X] == enumBlock::BLK) {
                     this->table[Y][X] = enumBlock::SPACE;
                 }
                 break;
@@ -99,7 +99,7 @@ int GameTable::blockUpdate(int key)
 void GameTable::createBlock()
 {
     srand((unsigned int)time(NULL));
-    int blockSelection = rand() % 5 + 1; // 1-5
+    int blockSelection = 1; // rand() % 5 + 1; // 1-5
     switch (blockSelection)
     {
     case 1:
