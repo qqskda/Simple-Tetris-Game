@@ -78,6 +78,14 @@ int GameTable::blockUpdate(int key)
                     this->table[Y][X] = enumBlock::FBLK;
                 }
                 break;
+            case 5: // HardDrop
+                if (blockValue == enumBlock::BLK) {
+                    if (thisTableVal == enumBlock::FBLK || thisTableVal == enumBlock::BOTTOM) {
+                        this->blockObject->up();
+                        return 1;
+                    }
+                }
+                break;
             }
         }
     }
@@ -157,4 +165,19 @@ void GameTable::rotateBlock()
 void GameTable::buildBlock()
 {
     blockUpdate((int)4);
+}
+
+void GameTable::hardDrop()
+{
+    int upStatus;
+    blockUpdate((int)1);
+    do {
+        upStatus = blockUpdate((int)5);
+        if (upStatus) break;
+        this->blockObject->down();
+    } while (true);
+    // Out of the loop -> find the fblk or bottom
+    GameTable::buildBlock();
+    GameTable::createBlock();
+
 }

@@ -6,7 +6,8 @@
 #define LEFT 75
 #define RIGHT 77 
 #define UP 72
-#define DOWN 80
+#define DOWN 80 
+#define HARD 32
 
 using namespace std;
 
@@ -36,13 +37,13 @@ public:
         // Draw the row: col Repetitions
         for (int col = 0; col < xAx; ++col)
         {
-            table[0][col] = 1;
+            table[0][col] = enumBlock::WALL;;
             table[yAx - 1][col] = enumBlock::BOTTOM;
         }
         // Draw the col: row - 2 reps (since top and bottom already drawn)
         for (int row = 1; row < yAx-1; ++row)
         {
-            table[row][0] = 1;
+            table[row][0] = enumBlock::WALL;
             table[row][xAx - 1] = enumBlock::WALL;
         }
     }
@@ -54,4 +55,5 @@ public:
     void moveBlock(int inputKey);
     void rotateBlock();
     void buildBlock();
+    void hardDrop();
 };

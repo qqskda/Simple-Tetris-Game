@@ -18,36 +18,34 @@ public:
 			if (_kbhit())
 			{
 				nSelect = _getch();
-				if (nSelect == 224)
+				if (nSelect == 224) // Arrow Keys follow after 224.
 				{
 					nSelect = _getch();
 					switch (nSelect)
 					{
 					case UP:
 						gt->rotateBlock(); // Rotate the block 90 degree 
-						gotoxy(0, 0); // move the cursor 0,0 
-						gt->GameTableDraw(); // overwrite the table 
 						break;
 					case DOWN: 
 						gt->moveBlock(DOWN);
-						gotoxy(0, 0);
-						gt->GameTableDraw();
 						break;
 					case LEFT: 
 						gt->moveBlock(LEFT);
-						gotoxy(0, 0);
-						gt->GameTableDraw();
 						break;
 					case RIGHT:
 						gt->moveBlock(RIGHT);
-						gotoxy(0, 0);
-						gt->GameTableDraw();
 						break;
 					default:
 						break;
 					}
 				}
+				else if (nSelect = HARD)
+				{
+					gt->hardDrop();
+				}
 			}
+			gotoxy(0, 0);
+			gt->GameTableDraw();
 		}
 	}
 	~GamePlay()
