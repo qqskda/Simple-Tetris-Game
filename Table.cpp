@@ -30,8 +30,6 @@ int GameTable::blockUpdate(int key)
         for (j = 0; j < 4; j++) {
             Y = j + currentY;
             X = i + currentX;
-            if (X < 0) return 1;
-            if (Y > TABLE_Y_AXIS) return 1;
             blockValue = blockShape[rotation][i][j];
             if (blockValue == 2)  thisTableVal = this->table[Y][X];
             
