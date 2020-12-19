@@ -1,17 +1,7 @@
 ﻿#include "Blocks.h"
 // Cursor invisible 0, visible 1
-void CursorView(char show)
-{
-	HANDLE hConsole;
-	CONSOLE_CURSOR_INFO ConsoleCursor;
 
-	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
-	ConsoleCursor.bVisible = show;
-	ConsoleCursor.dwSize = 1;
-
-	SetConsoleCursorInfo(hConsole, &ConsoleCursor);
-}
 
 // Cursor Position
 void gotoxy(short x, short y)

@@ -3,15 +3,43 @@
 
 using namespace std;
 
+HANDLE hConsole;
+void CursorView(char show)
+{
+    CONSOLE_CURSOR_INFO ConsoleCursor;
+
+    hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    ConsoleCursor.bVisible = show;
+    ConsoleCursor.dwSize = 1;
+
+    SetConsoleCursorInfo(hConsole, &ConsoleCursor);
+}
+
 void GameTable::GameTableDraw()
 {
     for (int row = 0; row < this->yAxis; ++row)
     {
         for (int col = 0; col < this->xAxis; ++col)
         {
-            if (this->table[row][col] == enumBlock::WALL || this->table[row][col] == enumBlock::BOTTOM) cout << (char)178u << " ";
-            else if (this->table[row][col] == enumBlock::BLK || this->table[row][col] == enumBlock::FBLK) cout << (char)254u << " ";
-            else cout << "  ";
+            if (this->table[row][col] == enumBlock::WALL || this->table[row][col] == enumBlock::BOTTOM) {
+                SetConsoleTextAttribute(hConsole, 10);
+                cout << (char)178u << " ";
+            }
+            else if (this->table[row][col] == enumBlock::BLK || this->table[row][col] == enumBlock::FBLK) {
+                SetConsoleTextAttribute(hConsole, 11);
+                cout << (char)254u << " ";
+            }
+            else if (this->table[row][col] == enumBlock::SHADOW)
+            {
+                SetConsoleTextAttribute(hConsole, 15);
+                cout << (char)254u << " ";
+            }
+            else
+            {
+                SetConsoleTextAttribute(hConsole, 12);
+                cout << "  ";
+            }
         }
         cout << "\n";
     }
@@ -29,12 +57,16 @@ int GameTable::blockUpdate(int key)
     // Will the access consumes more expensive than copying the entire shape?
     auto blockShape = *this->blockObject->getShape().nth;
     int rotation = this->blockObject->getRotationCount();
-    int i, j, Y, X, blockValue, thisTableVal;
+    int i, j, Y, X, blockValue, thisTableVal, sX, sY, shadowTableVal;
     int currentY = this->blockObject->getY(), currentX = this->blockObject->getX();
+    int shadowY = this->shadow->getY(), shadowX = this->shadow->getX();
     for (i = 0; i < 4; i++) {
         for (j = 0; j < 4; j++) {
             Y = j + currentY;
             X = i + currentX;
+            sY = j + shadowY;
+            sX = i + shadowX;
+
             if (boundFailed(X, Y)) continue;
             blockValue = blockShape[rotation][i][j];
             if (blockValue == 2)  thisTableVal = this->table[Y][X];
@@ -44,22 +76,23 @@ int GameTable::blockUpdate(int key)
                 this->table[Y][X] = blockValue;
                 break;
             case 1: // Remove the block from the table
-                if (blockValue == 2 && thisTableVal == enumBlock::BLK) {
+                if (blockValue == 2 && thisTableVal == enumBlock::BLK) { // if thisTableVal is block -> it has shadow below
                     this->table[Y][X] = enumBlock::SPACE;
+                    this->table[sY][sX] = enumBlock::SPACE;
                 }
                 break;
             case 2: // move
                 if (blockValue == enumBlock::BLK)
                 {
-                    if (thisTableVal == enumBlock::SPACE)
+                    if (thisTableVal == enumBlock::SPACE || thisTableVal == enumBlock::SHADOW)
                     {
-                        this->table[Y][X] = blockValue; // move the block to the empty space
+                        this->table[Y][X] = blockValue; // move the block to the empty space 
                     }
                     else if (thisTableVal == enumBlock::WALL)
                     {
                         return 1; // stop the changings
                     }
-                    else if (thisTableVal != enumBlock::BLK) // Not Space, not Wall, Not BLK ->  FBLK, BOTTOM
+                    else if (thisTableVal != enumBlock::BLK) // Not Space, not shadow, not Wall, Not BLK ->  FBLK, BOTTOM,
                     {
                         return 2;
                     }
@@ -91,6 +124,20 @@ int GameTable::blockUpdate(int key)
                     }
                 }
                 break;
+            case 6: // Shadow - HardDrop Variation
+                if (blockValue == enumBlock::BLK) {
+                    shadowTableVal = this->table[sY][sX];
+                    if (shadowTableVal == enumBlock::FBLK || shadowTableVal == enumBlock::BOTTOM) {
+                        this->shadow->up();
+                        return 1;
+                    }
+                }
+                break;
+            case 7: // Build Shadow 
+                if (blockValue == enumBlock::BLK) {
+                    this->table[sY][sX] = enumBlock::SHADOW;
+                }
+                break;
             }
         }
     }
@@ -100,23 +147,28 @@ int GameTable::blockUpdate(int key)
 void GameTable::createBlock()
 {
     srand((unsigned int)time(NULL));
-    int blockSelection = 1; //  rand() % 5 + 1; // 1-5
+    int blockSelection = rand() % 5 + 1; // 1-5
     switch (blockSelection)
     {
     case 1:
         this->blockObject = new Block1;
+        this->shadow = new Block1;
         break;
     case 2:
         this->blockObject = new Block2;
+        this->shadow = new Block2;
         break;
     case 3:
         this->blockObject = new Block3;
+        this->shadow = new Block3;
         break;
     case 4:
         this->blockObject = new Block4;
+        this->shadow = new Block4;
         break;
     default:
         this->blockObject = new Block5;
+        this->shadow = new Block5;
     }
     blockUpdate((int) 0); // update the block on the table
 }
@@ -128,6 +180,10 @@ int GameTable::moveBlock(int inputKey)
     bkTable.resize(this->table.size(), vector<int>(this->table[0].size()));
     Backup::updateBackupBlock(this->blockObject, bkBlock); // backup the original block
     Backup::updateBackupTable(this->table, bkTable);
+    
+    // shadow has same coordinate when it is created
+    GameTable::shadowCoordUpdate(); // Get the coord of shadow before remove the block
+
     blockUpdate((int)1);  // remove the block
 
     // Updating the block location along with the inputKey
@@ -136,6 +192,7 @@ int GameTable::moveBlock(int inputKey)
     else if (inputKey == RIGHT) this->blockObject->right();
 
     int upStatus = blockUpdate((int)2);
+
     // Now update the table with the new block location
     if (upStatus)
     {
@@ -148,6 +205,10 @@ int GameTable::moveBlock(int inputKey)
             GameTable::createBlock();
         }
     }
+    // After blockObject get the new coord -> apply to shadow before draw it
+    Backup::updateBackupBlock(this->blockObject, *this->shadow);
+    GameTable::shadowCoordUpdate();
+    blockUpdate((int)7);
     return 0;
 }
 
@@ -167,6 +228,10 @@ void GameTable::rotateBlock()
         Backup::updateBackupTable(bkTable, this->table);
         Backup::updateBackupBlock(&bkBlock, *this->blockObject);
     }
+    // After rotate draw
+    Backup::updateBackupBlock(this->blockObject, *this->shadow);
+    GameTable::shadowCoordUpdate();
+    blockUpdate((int)7);
 }
 
 void GameTable::buildBlock()
@@ -195,7 +260,7 @@ void GameTable::lineClean()
     bool isLinear;
     for (int y = END_OF_Y + 1; y < TABLE_Y_AXIS - 1; ++y) {
         isLinear = true;
-        for (int x = 1; x < TABLE_X_AXIS - 1; ++x) {
+        for (int x = 1; x < TABLE_X_AXIS - 1; ++x) { 
             if (this->table[y][x] != 3) {
                 isLinear = false;
                 break;
@@ -217,4 +282,14 @@ bool GameTable::statChecker()
         if (table[END_OF_Y][x] == enumBlock::FBLK) return true;
     }
     return false;
+}
+
+void GameTable::shadowCoordUpdate()
+{
+    int shadowStat;
+    do {
+        shadowStat = blockUpdate((int)6);
+        if (shadowStat) break;
+        this->shadow->down();
+    } while (true);
 }

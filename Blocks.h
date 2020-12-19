@@ -15,6 +15,7 @@ enum enumBlock
     BLK = 2,     // Block
     FBLK = 3,    // Finished Block = Built
     BOTTOM = 4,  // Bottom Boundary
+    SHADOW = 5,
 
 };
 
@@ -187,7 +188,7 @@ class Block
 {
 protected:
     Shape shape;
-    int x = ((int)TABLE_X_AXIS / 2) - 3; // Centre
+    int x = ((int)TABLE_X_AXIS / 2) - 2; // Centre
     int y = 1;
     int rotationCount = 0; // 0 - 3
 public:

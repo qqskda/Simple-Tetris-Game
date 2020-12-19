@@ -21,6 +21,8 @@ private:
     int yAxis = 0;
     vector<vector<int>> table; // game table
     Block* blockObject = nullptr;
+    Block* shadow = nullptr;
+
 public:
     GameTable(int xAx, int yAx)
     {   
@@ -61,4 +63,5 @@ public:
     int boundFailed(int X, int Y);
     void lineClean();
     bool statChecker();
+    void shadowCoordUpdate();
 };
