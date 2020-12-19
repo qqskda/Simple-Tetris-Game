@@ -216,8 +216,8 @@ public:
     void down();
     void left();
     void right();
-    void up();
     void rotate();
+    void up();
     void setShape(Shape givenShape);
     Shape getShape(){
         return this->shape;
@@ -238,6 +238,7 @@ class Block1 : public Block {
 public:
     Block1() : Block::Block(&block1) {}
 };
+
 class Block2 : public Block {
 public:
     Block2() : Block::Block(&block2) {}

@@ -1,5 +1,4 @@
 ﻿#include "Table.h"
-#include <stdexcept>
 
 
 using namespace std;
@@ -32,14 +31,15 @@ int GameTable::blockUpdate(int key)
             X = i + currentX;
             blockValue = blockShape[rotation][i][j];
             if (blockValue == 2)  thisTableVal = this->table[Y][X];
-            
+
+
             switch (key)
             {
             case 0: // creation of the block
                 this->table[Y][X] = blockValue;
                 break;
             case 1: // Remove the block from the table
-                if (this->table[Y][X] == enumBlock::BLK) {
+                if (blockValue == 2 && thisTableVal == enumBlock::BLK) {
                     this->table[Y][X] = enumBlock::SPACE;
                 }
                 break;
@@ -78,16 +78,6 @@ int GameTable::blockUpdate(int key)
                     this->table[Y][X] = enumBlock::FBLK;
                 }
                 break;
-            case 5: // Hard Drop
-                if (thisTableVal == enumBlock::BLK)
-                {
-                    if (thisTableVal == enumBlock::FBLK || thisTableVal == enumBlock::BOTTOM) // Not Space, not Wall, Not BLK ->  FBLK, BOTTOM
-                    {
-                        return 1;
-                    }
-                }
-                this->blockObject->down();
-                break;
             }
         }
     }
@@ -97,7 +87,7 @@ int GameTable::blockUpdate(int key)
 void GameTable::createBlock()
 {
     srand((unsigned int)time(NULL));
-    int blockSelection = 1; // rand() % 5 + 1; // 1-5
+    int blockSelection = 1; //  rand() % 5 + 1; // 1-5
     switch (blockSelection)
     {
     case 1:
@@ -167,17 +157,4 @@ void GameTable::rotateBlock()
 void GameTable::buildBlock()
 {
     blockUpdate((int)4);
-}
-
-void GameTable::hardDropBlock()
-{
-    blockUpdate((int)1);
-    int upStatus = blockUpdate((int)5);
-    if (upStatus) 
-    {
-        this->blockObject->up();
-        GameTable::buildBlock();
-        GameTable::createBlock();
-    }
-
 }
