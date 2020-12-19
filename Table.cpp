@@ -17,6 +17,12 @@ void GameTable::GameTableDraw()
     }
 }
 
+int GameTable::boundFailed(int X, int Y)
+{
+    if (Y < 0 || X < 0 || Y >= TABLE_Y_AXIS || X >= TABLE_X_AXIS) return 1;
+    else return 0;
+}
+
 int GameTable::blockUpdate(int key)
 {
     // the shape will be accessed 4*4 times -> better copy it in the given size.
@@ -29,10 +35,9 @@ int GameTable::blockUpdate(int key)
         for (j = 0; j < 4; j++) {
             Y = j + currentY;
             X = i + currentX;
+            if (boundFailed(X, Y)) continue;
             blockValue = blockShape[rotation][i][j];
             if (blockValue == 2)  thisTableVal = this->table[Y][X];
-
-
             switch (key)
             {
             case 0: // creation of the block
@@ -116,7 +121,7 @@ void GameTable::createBlock()
     blockUpdate((int) 0); // update the block on the table
 }
 
-void GameTable::moveBlock(int inputKey)
+int GameTable::moveBlock(int inputKey)
 {
     Block bkBlock(&block1);
     vector<vector<int>> bkTable;
@@ -139,9 +144,11 @@ void GameTable::moveBlock(int inputKey)
         if (inputKey == DOWN && upStatus == 2)
         {
             GameTable::buildBlock();
+            if (GameTable::statChecker()) return 1;
             GameTable::createBlock();
         }
     }
+    return 0;
 }
 
 void GameTable::rotateBlock()
@@ -167,7 +174,7 @@ void GameTable::buildBlock()
     blockUpdate((int)4);
 }
 
-void GameTable::hardDrop()
+int GameTable::hardDrop()
 {
     int upStatus;
     blockUpdate((int)1);
@@ -178,6 +185,36 @@ void GameTable::hardDrop()
     } while (true);
     // Out of the loop -> find the fblk or bottom
     GameTable::buildBlock();
+    if(GameTable::statChecker()) return 1;
     GameTable::createBlock();
+    return 0;
+}
 
+void GameTable::lineClean()
+{
+    bool isLinear;
+    for (int y = END_OF_Y + 1; y < TABLE_Y_AXIS - 1; ++y) {
+        isLinear = true;
+        for (int x = 1; x < TABLE_X_AXIS - 1; ++x) {
+            if (this->table[y][x] != 3) {
+                isLinear = false;
+                break;
+            }
+        }
+        if (isLinear) {
+            for (int i = y; i > END_OF_Y - 1; --i) {
+                for (int j = 1; j < TABLE_X_AXIS - 1; ++j) {
+                    this->table[i][j] = this->table[i - 1][j]; // pull down the above line to the bottom
+                }
+            }
+        }
+    }
+}
+
+bool GameTable::statChecker()
+{
+    for (int x = 1; x < TABLE_X_AXIS - 1; ++x) {
+        if (table[END_OF_Y][x] == enumBlock::FBLK) return true;
+    }
+    return false;
 }

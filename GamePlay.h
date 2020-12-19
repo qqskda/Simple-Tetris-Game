@@ -12,8 +12,20 @@ public:
 		gt = new GameTable(TABLE_X_AXIS, TABLE_Y_AXIS);
 		gt->createBlock(); // default block creation
 		gt->GameTableDraw(); // draw the gametable
+		int isOver = 0;
+		int timer = 0;
+		clock_t start, end;
+		start = clock();
+		float time;
 		while (true)
 		{
+			end = clock();
+			time = ((float)end - start) / CLOCKS_PER_SEC;
+			if (time > 1.5) // every 1.5 secs, move the block down.
+			{
+				isOver = gt->moveBlock(DOWN);
+				start = clock();
+			}
 			int nSelect;
 			if (_kbhit())
 			{
@@ -27,29 +39,34 @@ public:
 						gt->rotateBlock(); // Rotate the block 90 degree 
 						break;
 					case DOWN: 
-						gt->moveBlock(DOWN);
+						isOver = gt->moveBlock(DOWN);
 						break;
 					case LEFT: 
-						gt->moveBlock(LEFT);
+						isOver = gt->moveBlock(LEFT);
 						break;
 					case RIGHT:
-						gt->moveBlock(RIGHT);
+						isOver = gt->moveBlock(RIGHT);
 						break;
 					default:
 						break;
 					}
 				}
-				else if (nSelect = HARD)
+				else if (nSelect == HARD)
 				{
-					gt->hardDrop();
+					isOver = gt->hardDrop();
 				}
 			}
+			if (isOver) return; // Game Over
+			gt->lineClean();
 			gotoxy(0, 0);
-			gt->GameTableDraw();
+			gt->GameTableDraw(); // draw the gametable
 		}
 	}
 	~GamePlay()
 	{
+		system("cls");
+		gotoxy(10, 10);
+		cout << "Game Over!";
 		delete gt; // Destructor
 	}
 };

@@ -4,7 +4,7 @@
 #include <vector>
 using namespace std;
 
-#define TABLE_X_AXIS 20 // Tetris table x axis length
+#define TABLE_X_AXIS 15 // Tetris table x axis length
 #define TABLE_Y_AXIS 38 // Tetris table y axis length
 
 // Blocks enum

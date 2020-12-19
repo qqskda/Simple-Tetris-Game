@@ -9,6 +9,8 @@
 #define DOWN 80 
 #define HARD 32
 
+#define END_OF_Y 2
+
 using namespace std;
 
 
@@ -52,8 +54,11 @@ public:
     void GameTableDraw();
     int  blockUpdate(int key); 
     void createBlock();
-    void moveBlock(int inputKey);
+    int moveBlock(int inputKey);
     void rotateBlock();
     void buildBlock();
-    void hardDrop();
+    int hardDrop();
+    int boundFailed(int X, int Y);
+    void lineClean();
+    bool statChecker();
 };
