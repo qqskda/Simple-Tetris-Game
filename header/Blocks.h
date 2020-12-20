@@ -15,12 +15,11 @@ enum enumBlock
     BLK = 2,     // Block
     FBLK = 3,    // Finished Block = Built
     BOTTOM = 4,  // Bottom Boundary
-    SHADOW = 5,
+    SHADOW = 5,  // Shadow
 
 };
 
-// Cursor invisible 0, visible 1
-void CursorView(char show);
+
 
 // Cursor Position
 void gotoxy(short x, short y);

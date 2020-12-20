@@ -1,7 +1,4 @@
 ﻿#include "Blocks.h"
-// Cursor invisible 0, visible 1
-
-
 
 // Cursor Position
 void gotoxy(short x, short y)
@@ -37,6 +34,7 @@ void Block::setShape(Shape givenShape) {
 }
 
 
+// Backup Functions in case the newly move | rotation not possible
 void Backup::updateBackupBlock(Block* origin, Block& backupBlock)
 {
     backupBlock.setX(origin->getX());
@@ -44,7 +42,6 @@ void Backup::updateBackupBlock(Block* origin, Block& backupBlock)
     backupBlock.setRotation(origin->getRotationCount()); 
     backupBlock.setShape(origin->getShape());
 }
-
 void Backup::updateBackupTable(vector<vector<int>>& origin, vector<vector<int>>& backupTable)
 {
     copy(origin.begin(), origin.end(), backupTable.begin());

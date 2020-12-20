@@ -10,8 +10,8 @@ public:
 	GamePlay() // constructor
 	{
 		gt = new GameTable(TABLE_X_AXIS, TABLE_Y_AXIS);
-		gt->createBlock(); // default block creation
-		gt->GameTableDraw(); // draw the gametable
+		gt->createBlock();		// default block creation
+		gt->GameTableDraw();	// draw the gametable
 		int isOver = 0;
 		int timer = 0;
 		clock_t start, end;
@@ -21,7 +21,7 @@ public:
 		{
 			end = clock();
 			time = ((float)end - start) / CLOCKS_PER_SEC;
-			if (time > 1.5) // every 1.5 secs, move the block down.
+			if (time > 1.5)		// every 1.5 secs, move the block down.
 			{
 				isOver = gt->moveBlock(DOWN);
 				start = clock();
@@ -68,6 +68,6 @@ public:
 		system("cls");
 		gotoxy(10, 10);
 		cout << "Thanks for playing the game!" << endl;
-		delete gt; // Destructor
+		delete gt; 
 	}
 };

@@ -23,7 +23,7 @@ public:
         cout << "\t\t"; cout << "      @       @                @       @     @    @             @\n";
         cout << "\t\t"; cout << "      @       @@@@@@@@@        @       @      @   @   @@@@@@@@@@@\n\n\n\n\n";
         cout << "\t\t"; cout << "               Press keys to start the game .\n\n\n\n\n\n\n";
-        int a = getchar(); // Waiting for the key to start the game
+        getchar(); // Waiting for the key to start the game
         system("cls"); // Clean the console window 
 	}
 };
@@ -56,13 +56,13 @@ int exitContinue()
 int wmain(void) {
     int nextCommand = 0;
     CursorView(false);
-    system("mode con cols=100 lines=40");        // Console creationg cols and lines. 
-    GameTable gt(TABLE_X_AXIS, TABLE_Y_AXIS);    // GameTable Creation
+    system("mode con cols=100 lines=40");       // Console creationg cols and lines. 
+    GameTable gt(TABLE_X_AXIS, TABLE_Y_AXIS);   // GameTable Creation
     do {
-        MainMenu(); 
-        GamePlay gp = GamePlay();
-        nextCommand = exitContinue();
-    } while (nextCommand);
+        MainMenu();                             // MainMenu constructor call
+        GamePlay gp = GamePlay();               // GamePlay constructor -> Start of the game
+        nextCommand = exitContinue();           // Called after the gameover
+    } while (nextCommand);                      // Exit the loop when play chose to exit
     getchar();
     return 0;
 }

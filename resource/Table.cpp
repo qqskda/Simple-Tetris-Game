@@ -45,6 +45,7 @@ void GameTable::GameTableDraw()
     }
 }
 
+// Safeguard function
 int GameTable::boundFailed(int X, int Y)
 {
     if (Y < 0 || X < 0 || Y >= TABLE_Y_AXIS || X >= TABLE_X_AXIS) return 1;
@@ -144,6 +145,7 @@ int GameTable::blockUpdate(int key)
     return 0; // everything good
 }
 
+// Basic initialization of block and shadow.
 void GameTable::createBlock()
 {
     srand((unsigned int)time(NULL));
@@ -175,25 +177,29 @@ void GameTable::createBlock()
 
 int GameTable::moveBlock(int inputKey)
 {
+    // Backup objects
     Block bkBlock(&block1);
     vector<vector<int>> bkTable;
     bkTable.resize(this->table.size(), vector<int>(this->table[0].size()));
-    Backup::updateBackupBlock(this->blockObject, bkBlock); // backup the original block
+    Backup::updateBackupBlock(this->blockObject, bkBlock);
     Backup::updateBackupTable(this->table, bkTable);
     
     // shadow has same coordinate when it is created
-    GameTable::shadowCoordUpdate(); // Get the coord of shadow before remove the block
+    // Update the coordinates of shadow before remove the block below
+    GameTable::shadowCoordUpdate(); 
 
-    blockUpdate((int)1);  // remove the block
+    // Remove the created block before redraw
+    blockUpdate((int)1);  
 
     // Updating the block location along with the inputKey
     if (inputKey == DOWN) this->blockObject->down();
     else if (inputKey == LEFT) this->blockObject->left();
     else if (inputKey == RIGHT) this->blockObject->right();
 
+    // Draw the block
     int upStatus = blockUpdate((int)2);
 
-    // Now update the table with the new block location
+    // if Previous blockUpdate was not successful, use the backup Object
     if (upStatus)
     {
         Backup::updateBackupTable(bkTable, this->table);
@@ -205,7 +211,8 @@ int GameTable::moveBlock(int inputKey)
             GameTable::createBlock();
         }
     }
-    // After blockObject get the new coord -> apply to shadow before draw it
+    // The actual block is in the right place (either failed or succeded)
+    // Update the block coordinates to the shadow object and Draw
     Backup::updateBackupBlock(this->blockObject, *this->shadow);
     GameTable::shadowCoordUpdate();
     blockUpdate((int)7);
@@ -214,26 +221,30 @@ int GameTable::moveBlock(int inputKey)
 
 void GameTable::rotateBlock()
 {
+    // Backup Object Setup
     Block bkBlock(&block1);
     vector<vector<int>> bkTable;
     bkTable.resize(this->table.size(), vector<int>(this->table[0].size()));
-    Backup::updateBackupBlock(this->blockObject, bkBlock); // backup the original block
+    Backup::updateBackupBlock(this->blockObject, bkBlock);
     Backup::updateBackupTable(this->table, bkTable);
 
-    blockUpdate((int)1); // remove the block from the table
+    // Remove the block before redraw
+    blockUpdate((int)1); 
     this->blockObject->rotate(); // rotate the block
     
-    if (blockUpdate((int)3)) // update the block if it is empty place
+    // Apply the rotated shape to the table
+    if (blockUpdate((int)3)) 
     {
         Backup::updateBackupTable(bkTable, this->table);
         Backup::updateBackupBlock(&bkBlock, *this->blockObject);
     }
-    // After rotate draw
+    // After rotation done (failed | Succeded), draw shadow
     Backup::updateBackupBlock(this->blockObject, *this->shadow);
     GameTable::shadowCoordUpdate();
     blockUpdate((int)7);
 }
 
+// Solidify the blocks
 void GameTable::buildBlock()
 {
     blockUpdate((int)4);
@@ -255,6 +266,7 @@ int GameTable::hardDrop()
     return 0;
 }
 
+// Check if a line is fully occupied
 void GameTable::lineClean()
 {
     bool isLinear;
@@ -276,6 +288,7 @@ void GameTable::lineClean()
     }
 }
 
+// Check if it is gameover
 bool GameTable::statChecker()
 {
     for (int x = 1; x < TABLE_X_AXIS - 1; ++x) {
