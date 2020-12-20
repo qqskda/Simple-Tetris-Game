@@ -8,6 +8,8 @@
 #define UP 72
 #define DOWN 80 
 #define HARD 32
+#define RESTART 114
+#define EXIT 101
 
 #define END_OF_Y 2
 

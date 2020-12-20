@@ -62,11 +62,12 @@ public:
 			gt->GameTableDraw(); // draw the gametable
 		}
 	}
+	// Destructor called when player exit the game
 	~GamePlay()
 	{
 		system("cls");
 		gotoxy(10, 10);
-		cout << "Game Over!";
+		cout << "Thanks for playing the game!" << endl;
 		delete gt; // Destructor
 	}
 };
