@@ -19,6 +19,7 @@ __Implementation__:
   * Added Restart and Exit function.
 
 Following features are not implemented as it is out of project scope.
+
 __Future Improvements__:
   * Due to the original code's implementation, there is a bit of delay between shadow and the actual code block when move() function triggered.
   * Current version does not support Tetris features such as a change in the speed of block drops, scoreboard, and sound effects.
