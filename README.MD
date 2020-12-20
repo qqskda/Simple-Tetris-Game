@@ -9,4 +9,4 @@ Project Purpose:
 Project Expectation:
   * Have neat code, good documentation, and properly modularized structure.
   
-![game play image][/images/gamePlay.png]
+![game play image][/images/gamePlay.PNG]
