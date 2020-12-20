@@ -60,5 +60,8 @@
     <Image Include="Simple Tetris Game.ico">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="C:\Users\lsk75\Pictures\gamePlay.PNG">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

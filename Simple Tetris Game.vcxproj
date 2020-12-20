@@ -156,6 +156,7 @@
     <ResourceCompile Include="Simple Tetris Game.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="C:\Users\lsk75\Pictures\gamePlay.PNG" />
     <Image Include="Simple Tetris Game.ico" />
     <Image Include="small.ico" />
   </ItemGroup>
