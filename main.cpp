@@ -1,19 +1,19 @@
-﻿// Simple Tetris Game.cpp : Defines the entry point for the application.
+// Simple Tetris Game.cpp : Defines the entry point for the application.
 //
 
-#include "framework.h"
-#include "Simple Tetris Game.h"
-#include "Table.h"
-#include "Blocks.h"
-#include "GamePlay.h"
+#include "header/framework.h"
+#include "header/Simple Tetris Game.h"
+#include "header/Table.h"
+#include "header/Blocks.h"
+#include "header/GamePlay.h"
 
 using namespace std;
 
 class MainMenu
 {
 public:
-	MainMenu()
-	{
+    MainMenu()
+    {
         cout << "\n\n\n\n";
         cout << "\t\t"; cout << "@@@@@@@@@@@@  @@@@@@@@@   @@@@@@@@@@@  @@@@@@@@   @   @@@@@@@@@@@\n";
         cout << "\t\t"; cout << "      @       @                @       @      @   @   @          \n";
@@ -24,8 +24,8 @@ public:
         cout << "\t\t"; cout << "      @       @@@@@@@@@        @       @      @   @   @@@@@@@@@@@\n\n\n\n\n";
         cout << "\t\t"; cout << "               Press keys to start the game .\n\n\n\n\n\n\n";
         getchar(); // Waiting for the key to start the game
-        system("cls"); // Clean the console window 
-	}
+        system("cls"); // Clean the console window
+    }
 };
 
 // Allow user to restart | exit the game
@@ -56,7 +56,7 @@ int exitContinue()
 int wmain(void) {
     int nextCommand = 0;
     CursorView(false);
-    system("mode con cols=100 lines=40");       // Console creationg cols and lines. 
+    system("mode con cols=100 lines=40");       // Console creationg cols and lines.
     GameTable gt(TABLE_X_AXIS, TABLE_Y_AXIS);   // GameTable Creation
     do {
         MainMenu();                             // MainMenu constructor call

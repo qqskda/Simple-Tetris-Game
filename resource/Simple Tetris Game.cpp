@@ -1,11 +1,11 @@
 ﻿// Simple Tetris Game.cpp : Defines the entry point for the application.
 //
 
-#include "framework.h"
-#include "Simple Tetris Game.h"
-#include "Table.h"
-#include "Blocks.h"
-#include "GamePlay.h"
+#include "header/framework.h"
+#include "header/Simple Tetris Game.h"
+#include "header/Table.h"
+#include "header/Blocks.h"
+#include "header/GamePlay.h"
 
 using namespace std;
 
